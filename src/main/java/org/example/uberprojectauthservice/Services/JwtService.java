@@ -3,13 +3,11 @@ package org.example.uberprojectauthservice.Services;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Service;
 
-import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
@@ -18,7 +16,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Service
-public class jwtService implements CommandLineRunner {
+public class JwtService implements CommandLineRunner {
 
     @Value("${jwt.expiry}")
     private int expiry;
@@ -30,7 +28,7 @@ public class jwtService implements CommandLineRunner {
      * This method creates a brand-new JWT token for us based on payload
      */
 
-    private String createToken(Map<String, Object> payload, String email){
+    public String createToken(Map<String, Object> payload, String email){
         Date date =  new Date();
         Date expiryDate = new Date(date.getTime() + expiry*1000L);
 
@@ -43,8 +41,11 @@ public class jwtService implements CommandLineRunner {
                 .compact();
         return token;
     }
+    public String createToken(String email){
+        return createToken(new HashMap<>(), email);
+    }
 
-    private Claims  extractAllPayloads(String token){
+    public Claims  extractAllPayloads(String token){
         return Jwts
                 .parser()
                 .setSigningKey(getSignKey())
@@ -59,15 +60,15 @@ public class jwtService implements CommandLineRunner {
         return claimsResolver.apply(claims);
     }
 
-    private Date extractExpiration(String token){
+    public Date extractExpiration(String token){
             return extractClaim(token, Claims::getExpiration);
     }
 
-    private String extractEmail(String token){
+    public String extractEmail(String token){
         return extractClaim(token, Claims::getSubject);
     }
 
-    private Key getSignKey(){
+    public Key getSignKey(){
         return Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8));
     }
 
@@ -76,15 +77,15 @@ public class jwtService implements CommandLineRunner {
      * @param token JWT token
      * @return true if the Token is expired or else false
      */
-    private Boolean isTokenExpired(String token){
+    public Boolean isTokenExpired(String token){
         return extractExpiration(token).before(new Date());
     }
 
-    private Boolean ValidateToken(String token, String email){
+    public Boolean ValidateToken(String token, String email){
         final String userEmailFetchedFromToken = extractEmail(token);
         return  email.equals(userEmailFetchedFromToken) && !isTokenExpired(token);
     }
-    private Object extractPayload(String token, String payloadKey){
+    public Object extractPayload(String token, String payloadKey){
         Claims claims = extractAllPayloads(token);
         return (Object) claims.get(payloadKey);
     }

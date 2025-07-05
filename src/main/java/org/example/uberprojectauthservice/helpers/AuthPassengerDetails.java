@@ -12,19 +12,24 @@ import java.util.List;
 
 public class AuthPassengerDetails extends Passenger implements UserDetails {
 
-    private String userName; // email // name // id
+    private String username; // email // name // id
 
     private String password;
 
     public AuthPassengerDetails(Passenger passenger) {
-        this.userName = passenger.getEmail();
+        this.username = passenger.getEmail();
         this.password = passenger.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return this.userName;
+        return this.username;
     }
+    @Override
+    public String getPassword() {
+        return this.password;
+    }
+
     //Below, a set of methods are few concerns
 
     @Override
