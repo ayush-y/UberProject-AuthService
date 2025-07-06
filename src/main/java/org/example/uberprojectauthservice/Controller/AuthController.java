@@ -1,5 +1,6 @@
 package org.example.uberprojectauthservice.Controller;
 
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.example.uberprojectauthservice.Services.AuthService;
@@ -62,9 +63,10 @@ public class AuthController {
             String jwtToken = jwtService.createToken(authRequestDto.getEmail());
 
             ResponseCookie cookie = ResponseCookie.from("JwtToken", jwtToken)
-                            .httpOnly(true)
+                            .httpOnly(false)
                             .secure(false)
-                            .maxAge(cookieExpiry)
+                            .path("/")
+                            .maxAge(7*24*60*60)
                             .build();
 
             response.setHeader(HttpHeaders.SET_COOKIE, cookie.toString());
@@ -72,6 +74,16 @@ public class AuthController {
         }else{
             return new ResponseEntity<>("failed auth",HttpStatus.UNAUTHORIZED);
         }
+
+    }
+    @GetMapping("/validate")
+    public ResponseEntity<?> validateToken( HttpServletRequest request, HttpServletResponse response) {
+        for(Cookie cookie :  request.getCookies()) {
+            if(cookie.getName().equals("JwtToken")) {
+                System.out.println(cookie.getName()+ " "+cookie.getValue());
+            }
+        }
+            return new ResponseEntity<>("success", HttpStatus.OK);
     }
 
 
