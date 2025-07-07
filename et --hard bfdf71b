@@ -1,0 +1,9 @@
+[33mba2d538[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m HEAD@{0}: commit: auth added
+[33m09e2a62[m HEAD@{1}: commit: Auth added successfully
+[33mbfdf71b[m HEAD@{2}: commit: Added UserDeatils class and UserDetailServiceImpl given spring security
+[33me3d70e8[m HEAD@{3}: commit: Added payload extraction methods
+[33m98402a8[m HEAD@{4}: commit: JWT creation service started
+[33m3cb6f11[m HEAD@{5}: commit: added password hasing using Bcrypt
+[33m003dfc1[m HEAD@{6}: commit: Copied migrations and models and created a new migration
+[33mad1869e[m HEAD@{7}: commit: added first plain api with dto
+[33m4ced7ac[m HEAD@{8}: commit (initial): First Initial setup commit
